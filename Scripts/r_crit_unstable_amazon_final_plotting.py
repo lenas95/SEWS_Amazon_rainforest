@@ -45,9 +45,9 @@ from coupling import linear_coupling
 from functions_amazon import global_functions
 from scipy.stats import kendalltau
 
-"This code can be used to calculate the correlation between neighbouring cells (and plot it against average state of cell) for specially selected cells when increasing c_value for one/or more cells"
-"The spatial correlation index was defined as the two-point correlation for all pairs of cells separated by distance 1, using the Moran’s coefficient (Legendre)"
-
+"This code is use to get state values when approaching the drought conditions of the years examined, before and after tip for coupling and non-coupling"
+"Furthermore it is used to get the values of the critical functions as well as plotting the regions in terms of these dfferent critical function values"
+"The last two bits of code can be further used to plot the state values in the regions for different coupling and noise strengths"
 #sys_var = np.array(sys.argv[2:])
 #year = sys_var[0]
 #no_cpl_dummy = int(sys_var[1])
@@ -110,26 +110,26 @@ c_begin = np.loadtxt("./jobs/results/noise/final/c_begin_values.txt", usecols = 
 
 
 if region == 0:
-    cells = np.loadtxt("./jobs/results/noise/NWS_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NWS.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NWS_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NWS.txt", dtype=int)
 elif region == 1:
-    cells = np.loadtxt("./jobs/results/noise/NSA_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NSA.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NSA_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NSA.txt", dtype=int)
 elif region == 2:
-    cells = np.loadtxt("./jobs/results/noise/SAM_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_SAM.txt", dtype=int)
+    cells = np.loadtxt("./text_files/SAM_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_SAM.txt", dtype=int)
 elif region == 3:
-    cells = np.loadtxt("./jobs/results/noise/NES_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NES.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NES_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NES.txt", dtype=int)
 else:
     print(f"Whole network is selected")
-    c_end = np.loadtxt("./jobs/results/noise/final/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
-    cells = list(range(0, 567))
+    c_end = np.loadtxt("./text_files/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist.txt", dtype=int)
+    cells = range(0, 567))
 
 
 c_end[ c_end < 0] = 0
@@ -322,8 +322,8 @@ for region in regions:
 
 ###MAIN - PREPARATION###
 
-###To get plots of different dc values#########
-#need changing variables from file names
+###To get plots of different critical function values#########
+
 dataset = data_crit[0]
 net_data = Dataset(dataset)
 
@@ -379,26 +379,26 @@ for region in regions:
     vals[:,:] = np.nan
 
     if region == 0:
-        cells = np.loadtxt("./jobs/results/noise/NWS_cells.txt", dtype=int)
-        c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
-        neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NWS.txt", dtype=int)
+        cells = np.loadtxt("./text_files/NWS_cells.txt", dtype=int)
+        c_end = np.loadtxt("./text_files/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
+        neighbour = np.loadtxt("./text_files/neighbourslist_NWS.txt", dtype=int)
     elif region == 1:
-        cells = np.loadtxt("./jobs/results/noise/NSA_cells.txt", dtype=int)
-        c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
-        neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NSA.txt", dtype=int)
+        cells = np.loadtxt("./text_files/NSA_cells.txt", dtype=int)
+        c_end = np.loadtxt("./text_files/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
+        neighbour = np.loadtxt("./text_files/neighbourslist_NSA.txt", dtype=int)
     elif region == 2:
-        cells = np.loadtxt("./jobs/results/noise/SAM_cells.txt", dtype=int)
-        c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
-        neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_SAM.txt", dtype=int)
+        cells = np.loadtxt("./text_files/SAM_cells.txt", dtype=int)
+        c_end = np.loadtxt("./text_files/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
+        neighbour = np.loadtxt("./text_files/neighbourslist_SAM.txt", dtype=int)
     elif region == 3:
-        cells = np.loadtxt("./jobs/results/noise/NES_cells.txt", dtype=int)
-        c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
-        neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NES.txt", dtype=int)
+        cells = np.loadtxt("./text_files/NES_cells.txt", dtype=int)
+        c_end = np.loadtxt("./text_files/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
+        neighbour = np.loadtxt("./text_files/neighbourslist_NES.txt", dtype=int)
     else:
         print(f"Whole network is selected")
-        c_end = np.loadtxt("./jobs/results/noise/final/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
-        neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
-        cells = list(range(0, 567))
+        c_end = np.loadtxt("./text_files/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
+        neighbour = np.loadtxt("./text_files/neighbourslist.txt", dtype=int)
+        cells = range(0, 567))
 
     c_end[ c_end < 0] = 0
     #Try out not including the c>2 values for 2005
@@ -931,121 +931,6 @@ for item in coupling:
             #When plotting for different noise states
             #plt.savefig("beforetip_noise{}_unstableamazon{:04n}".format(int(item*100), i), bbox_inches='tight')
             
-            plt.clf()
-            plt.close() 
-'''
-
-
-
-#####No NEED for this part anymore#####
-'''   
-else:
-    for i in np.arange(0, ilist[-1]+1, 100):
-        print(i)
-        if i == ilist[-2] or i == ilist[-1]: #or i % 1000 == 0:
-            os.chdir("/p/projects/dominoes/lena/jobs/results/noise/final/{}/correlation_status".format(year))
-            print("Plotting sequence")
-            #latlon values
-            lat = net_data.variables["lat"][:]
-            lon = net_data.variables["lon"][:]   
-            tuples = [(lat[idx],lon[idx]) for idx in range(lat.size)]   
-
-            #tuples_2 = [(idx, idy) for idx, idy in range(lat.size)]
-            #print(tuples_2)
-
-            #tuples_NWS = [(lat, lon) for lat in range(-17, +11) for lon in range(-79, -71)]
-            #print(np.sort(tuples_NWS))
-            #tuples_NSA = [(lat, lon) for lat in range(-7, +11) for lon in range(-71, -50)]
-            #tuples_SAM = [(lat, lon) for lat in range(-17, -7) for lon in range(-71, -50)]
-            #tuples_NES = [(lat, lon) for lat in range(-17, 2) for lon in range(-50, -44)]
-
-            lat = np.unique(lat)
-            #print(f"Latitude values are", lat)
-            lon = np.unique(lon)
-            lat = np.append(lat, lat[-1]+lat[-1]-lat[-2]) 
-            lon = np.append(lon, lon[-1]+lon[-1]-lon[-2])
-
-            vals = np.empty((lat.size,lon.size)) #Vals is True or False depending on if the cells tipped
-            vals[:,:] = np.nan
-
-            #For different regions latitutde and longitude latitude and longitutde values
-            if region == 0:
-                tuples_region = [(lat, lon) for lat in range(-17, +11) for lon in range(-79, -71)]                 
-                #print(f"Tuple values for region 0 are:", tuples_region)
-            elif region == 1:
-                tuples_region = [(lat, lon) for lat in range(-7, +11) for lon in range(-71, -50)]
-                #print(f"Tuple values for region 0 are:", tuples_region)
-            elif region == 2:
-                tuples_region = [(lat, lon) for lat in range(-17, -7) for lon in range(-71, -50)]
-            elif region == 3:
-                tuples_region = [(lat, lon) for lat in range(-17, 2) for lon in range(-50, -44)]
-            else:
-                tuples_region = [(lat,lon)]
-
-            tuple_list = []
-            for idx,x in enumerate(lat):
-                for idy,y in enumerate(lon):
-                    if (x,y) in tuples and (x,y) in tuples_region: 
-                        tuple_list.append(tuples.index((x,y)))
-                        #print(f"(x,y) are", ((x,y)))
-                        print(f"Tuples index is.,", tuples.index((x,y)))
-                        cell_index = list(cells).index(tuples.index((x,y)))
-                        print(f"Cell index is:,", cell_index)
-
-                        #Get all cells values if tipped or not in varible p
-                        #p = net.get_tip_states(ev.get_timeseries()[1][-1])[:][tuples.index((x,y))]
-                        
-                        #Get also intermediate values for cells
-                        if no_cpl_dummy == True:
-                            i_new = int(i/100)
-                            p = all_states[cell_index, i_new]
-                            #print(f"p-value of tuple is", p)
-                            vals[idx,idy] = p
-                        else:
-                            i_new = int(i/100)
-                            print(f"i_new is", i_new)
-                            p = all_states[cell_index, i_new]
-                            #p = c_end[cell_index]
-                            vals[idx,idy] = p
-                    else:
-                        pass
-
-            print(f"Sorted tuple list is:", np.sort(tuple_list))
-
-            plt.rc('text', usetex=False)
-            plt.rc('font', family='serif', size=25)
-
-            plt.figure(figsize=(15,10))
-
-            ax = plt.axes(projection=ccrs.PlateCarree())
-            ax.set_extent([275, 320, -22, 15], crs=ccrs.PlateCarree())
-            ax.add_feature(cfeature.COASTLINE, linewidth=1)
-            ax.coastlines('50m')
-            # cmap = plt.get_cmap('turbo')
-            # cmap = plt.get_cmap('summer', 20)
-            # cmap = matplotlib.cm.ocean(np.linspace(0,1,20))
-            # cmap = matplotlib.cm.summer(np.linspace(0,1,40))
-            # cmap = matplotlib.colors.ListedColormap(cmap[0:40])
-            #cmap = matplotlib.cm.nipy_spectral(np.linspace(0,1,30))
-            #cmap = matplotlib.colors.ListedColormap(cmap[15:25])
-
-            cmap = matplotlib.colors.LinearSegmentedColormap.from_list('summer', ['#1B5E20','#D4E157','#FFEE58','#FF8F00'])
-
-            plt.pcolor(lon-(lon[-1]-lon[-2]) / 2, lat-(lat[-1]-lat[-2]) / 2, vals, cmap=cmap)
-            #nx.draw_networkx(net,pos, edge_color='black', node_size=0, with_labels=False)
-            cbar = plt.colorbar(label='States of nodes for Amazon rainforest')
-            
-            #cbar = plt.colorbar(label='Critical parameter c')  #When plotting c-values
-            cmap.set_over('red')
-            plt.clim(-1.0, -0.60)
-
-            if no_cpl_dummy == True:
-                plt.savefig("no_coupling/region{}/unstableamazon{:04n}".format(region, i), bbox_inches='tight')
-            else:
-                plt.savefig("region{}/unstableamazon{:04n}".format(region, i), bbox_inches='tight')
-                
-            print(f"figure created")
-            #plt.show()
             plt.clf()
             plt.close() 
 '''
