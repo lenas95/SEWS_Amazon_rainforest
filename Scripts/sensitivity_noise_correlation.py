@@ -49,7 +49,7 @@ from scipy import stats
 from scipy.stats import kendalltau
 import pymannkendall as mk
 
-"This code can be used to calculate the variance (and plot it against average state of cell) and the respective Kendall-Tau for different noise levels"
+"This code can be used to calculate the Moran's I coefficient (and plot it against average state of cell) and the respective Kendall-Tau for different noise levels"
 
 #Load neighbourlist to compute correlation between cells from r_crit_unstable_amazon.py
 #neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
@@ -140,7 +140,7 @@ def correlation():
             corr_item = len(list(cells)) * (sum) /(len(list(neighbour)) * np.sum(den_list))
             cor.append(corr_item)
 
-        #kendall_tau_only = kendalltau(var, noise)
+        #kendall_tau_only = kendalltau(var, noise)  #Gives out same Kendall$\tau$ value as the mk.original() test and as kendalltau(var, iterations)
         #print(f"kendall tau only is", kendall_tau_only)
         mk_cpl = mk.original_test(cor)
         print(f"MK coupling is", mk_cpl)
@@ -190,7 +190,7 @@ def correlation_nocpl():
     return kendall_tau, p
 
 '''
-#Calculate correlation from loaded states according to Dakos 2012
+#Calculate correlation from loaded states according to Dakos 2010
 def correlation_nocpl():
 
     for item in noise:
