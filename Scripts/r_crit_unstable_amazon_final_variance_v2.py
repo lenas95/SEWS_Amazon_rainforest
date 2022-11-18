@@ -49,7 +49,7 @@ from scipy import stats
 from scipy.stats import kendalltau
 import pymannkendall as mk
 
-"This code can be used to calculate the variance (and plot it against average state of cell) for specially selected cells when increasing c_value for one/or more cells"
+"This code can be used to calculate the spatial variance and plot it against the number of iterations"
 
 #Load neighbourlist to compute correlation between cells from r_crit_unstable_amazon.py
 #neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
@@ -69,26 +69,26 @@ year = 2010
 region = 0
 
 if region == 0:
-    cells = np.loadtxt("./jobs/results/noise/NWS_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NWS.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NWS_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NWS.txt", dtype=int)
 elif region == 1:
-    cells = np.loadtxt("./jobs/results/noise/NSA_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NSA.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NSA_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NSA.txt", dtype=int)
 elif region == 2:
-    cells = np.loadtxt("./jobs/results/noise/SAM_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_SAM.txt", dtype=int)
+    cells = np.loadtxt("./text_files/SAM_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_SAM.txt", dtype=int)
 elif region == 3:
-    cells = np.loadtxt("./jobs/results/noise/NES_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NES.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NES_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NES.txt", dtype=int)
 else:
     print(f"Whole network is selected")
-    c_end = np.loadtxt("./jobs/results/noise/final/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
-    cells = range(0, 567)
+    c_end = np.loadtxt("./text_files/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist.txt", dtype=int)
+    cells = range(0, 567))
 
 c_end[ c_end < 0] = 0
 t_step = 0.1
@@ -180,7 +180,7 @@ cpl_cell = np.loadtxt("cusp_{}_region{}.txt".format(year, region), dtype=np.floa
 no_cpl_cell = np.loadtxt("no_coupling/cusp_{}_region{}.txt".format(year, region), dtype = np.float64)
 
 # Print out tau kendall value for the whole time series
-
+'''
 mk_cpl = mk.original_test(var_cpl)
 mk_nocpl = mk.original_test(var_no_cpl)
 print(f"Mk is", mk_cpl)
@@ -192,6 +192,8 @@ kend_item_nocpl = round(mk_nocpl.Tau,2)
 p_item_nocpl = mk_nocpl.p
 print(p_item_nocpl)
 kend_items = [kend_item_cpl, kend_item_nocpl]
+'''
+
 kend_item_cpl_only = kendalltau(ilist[:-1]/100, var_cpl)
 kend_item_nocpl_only = kendalltau(ilist_nocpl[:-1]/100, var_no_cpl)
 print(f"Kendalltauitem coupling", kend_item_cpl_only)
