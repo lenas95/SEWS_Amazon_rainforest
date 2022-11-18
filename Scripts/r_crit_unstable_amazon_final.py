@@ -126,7 +126,7 @@ else:
     print(f"Whole network is selected")
     c_end = np.loadtxt("./text_files/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
     neighbour = np.loadtxt("./text_files/neighbourslist.txt", dtype=int)
-    cells = len(list(0, 567))
+    cells = range(0, 567))
 
 
 c_end[ c_end < 0] = 0
