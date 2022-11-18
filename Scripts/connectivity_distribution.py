@@ -111,25 +111,25 @@ lon = net_data.variables["lon"][:]
 tuples = [(lat[idx],lon[idx]) for idx in range(lat.size)]
 
 if region == 0:
-    cells = np.loadtxt("./NWS_cells.txt", dtype=int)
-    c_end = np.loadtxt("./c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./neighbourslist_NWS.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NWS_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NWS.txt", dtype=int)
 elif region == 1:
-    cells = np.loadtxt("./NSA_cells.txt", dtype=int)
-    c_end = np.loadtxt("./c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./neighbourslist_NSA.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NSA_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NSA.txt", dtype=int)
 elif region == 2:
-    cells = np.loadtxt("./SAM_cells.txt", dtype=int)
-    c_end = np.loadtxt("./c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./neighbourslist_SAM.txt", dtype=int)
+    cells = np.loadtxt("./text_files/SAM_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_SAM.txt", dtype=int)
 elif region == 3:
-    cells = np.loadtxt("./NES_cells.txt", dtype=int)
-    c_end = np.loadtxt("./c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NES.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NES_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NES.txt", dtype=int)
 else:
     print(f"Whole network is selected")
-    c_end = np.loadtxt("./c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./neighbourslist.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist.txt", dtype=int)
     cells = len(list(0, 567))
 
 '''
