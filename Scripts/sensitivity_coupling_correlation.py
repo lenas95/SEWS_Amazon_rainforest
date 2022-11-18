@@ -49,7 +49,7 @@ from scipy import stats
 from scipy.stats import kendalltau
 import pymannkendall as mk
 
-"This code can be used to calculate the variance (and plot it against average state of cell) and the respective Kendall-Tau for different noise levels"
+"This code can be used to calculate the variance (and plot it against average state of cell) and the respective Kendall-Tau for different coupling levels"
 
 #Load neighbourlist to compute correlation between cells from r_crit_unstable_amazon.py
 #neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
