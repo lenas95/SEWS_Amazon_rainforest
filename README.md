@@ -13,3 +13,6 @@ git clone https://github.com/lenas95/SEWS_Amazon_rainforest
 cd SEWS 
 pip install -e . 
 ```
+# Description
+
+The main scripts to build the Amazon rainforest are found in the folder amazon_rainforest and pycascades. Both were retrieved from ```https://github.com/pik-copan/pycascades```
