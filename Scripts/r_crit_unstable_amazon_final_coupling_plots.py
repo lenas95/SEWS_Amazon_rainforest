@@ -49,8 +49,8 @@ from scipy import stats
 from scipy.stats import kendalltau
 import pymannkendall as mk
 import pickle as pkl
-"This code can be used to calculate the correlation between neighbouring cells (and plot it against average state of cell) for specially selected cells when increasing c_value for one/or more cells"
-"The spatial correlation index was defined as the two-point correlation for all pairs of cells separated by distance 1, using the Moran’s coefficient (Legendre)"
+
+"This code is used to plot the evolution of the Moran's I coefficient and the spatial variance for different coupling strenghts"
 
 #Load neighbourlist to compute correlation between cells from r_crit_unstable_amazon.py
 #neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
