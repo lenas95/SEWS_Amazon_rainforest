@@ -48,8 +48,9 @@ from scipy import stats
 from scipy.stats import kendalltau
 import pymannkendall as mk
 import pickle as pkl
-"This code can be used to calculate the correlation between neighbouring cells (and plot it against average state of cell) for specially selected cells when increasing c_value for one/or more cells"
-"The spatial correlation index was defined as the two-point correlation for all pairs of cells separated by distance 1, using the Moran’s coefficient (Legendre)"
+
+
+"This code can be used to calculate the Moran's I coefficient depicting the correlation between neighbouring cells and plot it against the number of iterations"
 
 #Load neighbourlist to compute correlation between cells from r_crit_unstable_amazon.py
 #neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
@@ -70,26 +71,26 @@ region = 0
 print("Region {} selected".format(region))
 
 if region == 0:
-    cells = np.loadtxt("./jobs/results/noise/NWS_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NWS.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NWS_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NWS.txt", dtype=int)
 elif region == 1:
-    cells = np.loadtxt("./jobs/results/noise/NSA_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NSA.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NSA_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NSA.txt", dtype=int)
 elif region == 2:
-    cells = np.loadtxt("./jobs/results/noise/SAM_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_SAM.txt", dtype=int)
+    cells = np.loadtxt("./text_files/SAM_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_SAM.txt", dtype=int)
 elif region == 3:
-    cells = np.loadtxt("./jobs/results/noise/NES_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NES.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NES_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NES.txt", dtype=int)
 else:
     print(f"Whole network is selected")
-    c_end = np.loadtxt("./jobs/results/noise/final/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
-    cells = range(0, 567)
+    c_end = np.loadtxt("./text_files/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist.txt", dtype=int)
+    cells = range(0, 567))
 
 c_end[ c_end < 0] = 0
 t_step = 0.1
@@ -118,7 +119,8 @@ all_states = np.loadtxt("states_cusps_{}_region{}.txt".format(year, region), dty
 #ilist_nocpl = [i/100 for i in ilist_nocpl]
 print(ilist)
 
-#Try out with another sum approach
+#Calculate Moran's I coefficient between neighbouring cells from Dakos et al., 2010
+#Try out with another sum approach (faster)
 def correlation():
     cor =  []
     for iteration in range(0, len(ilist)-1):
@@ -173,15 +175,17 @@ def correlation_nocpl():
 cor_cpl = correlation()
 cor_no_cpl = correlation_nocpl()
 
-
+'''
 # Print out tau kendall value for the whole time series
 mk_cpl = mk.original_test(cor_cpl)
 mk_nocpl = mk.original_test(cor_no_cpl)
 print(f"Mk is", mk_cpl)
 print(f"Mk no coupling is", mk_nocpl)
 kend_item_cpl = round(mk_cpl.Tau,2)
-kend_item_nocpl = round(mk_nocpl.Tau,2)
+kend_item_nocpl = round(mk_nocpl.Tau,2) #For simplicity MannKendall-Test was used here ; gives out same result as kendalltau()
 kend_items = [kend_item_cpl, kend_item_nocpl]
+'''
+
 kend_item_cpl_only = kendalltau(ilist[:-1], cor_cpl)
 kend_item_nocpl_only = kendalltau(ilist_nocpl[:-1], cor_no_cpl)
 print(f"Kendalltauitem coupling", kend_item_cpl_only)
