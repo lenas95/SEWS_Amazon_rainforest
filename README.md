@@ -16,3 +16,10 @@ pip install -e .
 # Description
 
 The main scripts to build the Amazon rainforest are found in the folder Scripts/pycascades. It was etrieved from ```https://github.com/pik-copan/pycascades```. The folders Scripts/average_network and  Scripts/probabilistic_ensemble contain the data used to build the network depicting the Amazon rainforest.
+
+# Main Scripts
+
+The main scripts used to create the graphs in the master's thesis are listed in the folder Scripts.
+An overview is given below:
+
+- 
