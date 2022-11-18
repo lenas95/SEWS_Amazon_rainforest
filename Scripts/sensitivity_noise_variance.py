@@ -106,9 +106,7 @@ kendall_tau_cpl = []
 p_cpl = []
 kendall_tau = []
 p = []
-#noise = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1]
-#noise = [0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05,0.055, 0.06, 0.065, 0.07, 0.075, 0.08, 00.085, 0.09, 0.095, 0.1]
-#print(f"14th value of noise is", noise[14])
+
 noise = [0.01, 0.015, 0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.1]
 
 #Calculate variance from loaded states for every noise coupling and no coupling
@@ -146,7 +144,7 @@ def variance():
         fmt = '%1.5f'
         np.savetxt(os.path.join(path, "no_coupling/region{}/variance{}_region{}_coupling{}.txt".format(region, year, region, item)), var_nocpl, fmt = fmt)
 
-        mk_nocpl = mk.original_test(var_nocpl)
+        mk_nocpl = mk.original_test(var_nocpl)  # The ml.original_test() gives out same value for Kendall$\tau$ and p- as for kendalltau(var_nocpl, iterations) or kendalltau(var_no_cpl, noise)
         print(f"Mk no coupling is", mk_nocpl)
         kend_item_nocpl, pval_nocpl = mk_nocpl.Tau, mk_nocpl.p
         kendall_tau.append(kend_item_nocpl)
