@@ -15,4 +15,4 @@ pip install -e .
 ```
 # Description
 
-The main scripts to build the Amazon rainforest are found in the folder amazon_rainforest and pycascades. Both were retrieved from ```https://github.com/pik-copan/pycascades```
+The main scripts to build the Amazon rainforest are found in the folder pycascades. Both were retrieved from ```https://github.com/pik-copan/pycascades```. The folder amazon_rainforest contains the data used to build the network depicting the Amazon rainforest.
