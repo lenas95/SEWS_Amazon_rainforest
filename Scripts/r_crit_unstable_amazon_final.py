@@ -46,8 +46,8 @@ from coupling import linear_coupling
 from functions_amazon import global_functions
 from scipy.stats import kendalltau
 
-"This code can be used to calculate the correlation between neighbouring cells (and plot it against average state of cell) for specially selected cells when increasing c_value for one/or more cells"
-"The spatial correlation index was defined as the two-point correlation for all pairs of cells separated by distance 1, using the Moran’s coefficient (Legendre)"
+"This code can be used to get the state values as .txt files for the different experiments."
+"Furthermore, plots of the regions of the Amazon rainforest to depict the state value distribution of the state values"
 
 sys_var = np.array(sys.argv[2:])
 year = sys_var[0]
@@ -98,110 +98,7 @@ data_eval = data_crit
 #Get all negavtive c-values converted to 0
 #c_end[c_end < 0] = 0
 
-#Code to load pictures
-'''
-#Print a picture every 10 iterations
-if i == (ilist[-1]/100): #i % 10 == 0 or 
-    print(i)
-    
-    os.chdir("/p/projects/dominoes/lena/jobs/results/noise/final/{}/correlation_status".format(year))
-    print("Plotting sequence")
-    #latlon values
-    lat = net_data.variables["lat"][:]
-    lon = net_data.variables["lon"][:]   
-    tuples = [(lat[idx],lon[idx]) for idx in range(lat.size)]   
-    
-    #tuples_2 = [(idx, idy) for idx, idy in range(lat.size)]
-    #print(tuples_2)
-
-    #tuples_NWS = [(lat, lon) for lat in range(-17, +11) for lon in range(-79, -71)]
-    #print(np.sort(tuples_NWS))
-    #tuples_NSA = [(lat, lon) for lat in range(-7, +11) for lon in range(-71, -50)]
-    #tuples_SAM = [(lat, lon) for lat in range(-17, -7) for lon in range(-71, -50)]
-    #tuples_NES = [(lat, lon) for lat in range(-17, 2) for lon in range(-50, -44)]
-
-    lat = np.unique(lat)
-    #print(f"Latitude values are", lat)
-    lon = np.unique(lon)
-    lat = np.append(lat, lat[-1]+lat[-1]-lat[-2]) 
-    lon = np.append(lon, lon[-1]+lon[-1]-lon[-2])
-
-    vals = np.empty((lat.size,lon.size)) #Vals is True or False depending on if the cells tipped
-    vals[:,:] = np.nan
-
-    #For different regions latitutde and longitude latitude and longitutde values
-    if region == 0:
-        tuples_region = [(lat, lon) for lat in range(-17, +11) for lon in range(-79, -71)]                 
-        #print(f"Tuple values for region 0 are:", tuples_region)
-    elif region == 1:
-        tuples_region = [(lat, lon) for lat in range(-7, +11) for lon in range(-71, -50)]
-        #print(f"Tuple values for region 0 are:", tuples_region)
-    elif region == 2:
-        tuples_region = [(lat, lon) for lat in range(-17, -7) for lon in range(-71, -50)]
-    elif region == 3:
-        tuples_region = [(lat, lon) for lat in range(-17, 2) for lon in range(-50, -44)]
-    else:
-        lat = lat
-        lon = lon
-
-    tuple_list = []
-    for idx,x in enumerate(lat):
-        for idy,y in enumerate(lon):
-            if (x,y) in tuples and (x,y) in tuples_region: #and (x,y) in tuples_region:
-                tuple_list.append(tuples.index((x,y)))
-                #print(f"(x,y) are", ((x,y)))
-                print(f"Tuples index is.,", tuples.index((x,y)))
-                cell_index = list(cells).index(tuples.index((x,y)))
-                print(f"Cell index is:,", cell_index)
-
-                #Get all cells values if tipped or not in varible p
-                #p = net.get_tip_states(ev.get_timeseries()[1][-1])[:][tuples.index((x,y))]
-                
-                #Get also intermediate values for cells
-                if no_cpl_dummy == True:
-                    p = all_states_nocpl[cell_index, i]
-                    #print(f"p-value of tuple is", p)
-                    vals[idx,idy] = p
-                else:
-                    p = all_states[cell_index, i]
-                    vals[idx,idy] = p
-            else:
-                pass
-
-    print(f"Sorted tuple list is:", np.sort(tuple_list))
-
-    plt.rc('text', usetex=False)
-    plt.rc('font', family='serif', size=25)
-
-    plt.figure(figsize=(15,10))
-
-    ax = plt.axes(projection=ccrs.PlateCarree())
-    ax.set_extent([275, 320, -22, 15], crs=ccrs.PlateCarree())
-    ax.add_feature(cfeature.COASTLINE, linewidth=1)
-    ax.coastlines('50m')
-    # cmap = plt.get_cmap('turbo')
-    # cmap = plt.get_cmap('summer')
-    # cmap = matplotlib.cm.ocean(np.linspace(0,1,20))
-    cmap = matplotlib.cm.summer(np.linspace(0,1,20))
-    cmap = matplotlib.colors.ListedColormap(cmap[0:20])
-
-    plt.pcolor(lon-(lon[-1]-lon[-2]) / 2, lat-(lat[-1]-lat[-2]) / 2, vals, cmap=cmap)
-    #nx.draw_networkx(net,pos, edge_color='black', node_size=0, with_labels=False)
-    cbar = plt.colorbar(label='Unstable Amazon states with coupling')
-
-    if no_cpl_dummy == True:
-        plt.savefig("no_coupling/region{}/unstable_amaz_{}_{}_adaptsample{}_adaptsigma{}_number{}_{}_{}_pic{}.png".format(region, resolution_type, year_type, 
-            str(start_file).zfill(3), int(np.around(100*adapt)), id, float(rain_fact), realtime_break, i), bbox_inches='tight')
-    else:
-        plt.savefig("region{}/unstable_amaz_{}_{}_adaptsample{}_adaptsigma{}_number{}_{}_{}_pic{}.png".format(region, resolution_type, year_type, 
-            str(start_file).zfill(3), int(np.around(100*adapt)), id, float(rain_fact), realtime_break, i), bbox_inches='tight')
-        
-
-    #plt.show()
-    plt.clf()
-    plt.close() 
-'''
-
+#Change directory
 c_begin = np.loadtxt("./jobs/results/noise/final/c_begin_values.txt", usecols = 1, dtype = np.float64)
 
 #c_values = np.loadtxt("./jobs/results/noise/final/c_end_values.txt", dtype=dtype)
@@ -210,34 +107,37 @@ c_begin = np.loadtxt("./jobs/results/noise/final/c_begin_values.txt", usecols = 
 region = 3
 
 if region == 0:
-    cells = np.loadtxt("./jobs/results/noise/NWS_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NWS.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NWS_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NWS.txt", dtype=int)
 elif region == 1:
-    cells = np.loadtxt("./jobs/results/noise/NSA_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NSA.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NSA_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NSA.txt", dtype=int)
 elif region == 2:
-    cells = np.loadtxt("./jobs/results/noise/SAM_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_SAM.txt", dtype=int)
+    cells = np.loadtxt("./text_files/SAM_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_SAM.txt", dtype=int)
 elif region == 3:
-    cells = np.loadtxt("./jobs/results/noise/NES_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NES.txt", dtype=int)
+    cells = np.loadtxt("./text_files/NES_cells.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist_NES.txt", dtype=int)
 else:
     print(f"Whole network is selected")
-    c_end = np.loadtxt("./jobs/results/noise/final/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
+    c_end = np.loadtxt("./text_files/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./text_files/neighbourslist.txt", dtype=int)
+    cells = len(list(0, 567))
 
 
 c_end[ c_end < 0] = 0
 #Try out not including the c>2 values for 2005
 #c_end[c_end >= 2.0] = 0
 t_step = 0.1
-realtime_break = 200 #originally 30000 and works with 200 (see r_crt_unstable_amazon.py)
+realtime_break = 100 #change to 200 if 2000 timesteps is used in the experiments
 timesteps = (realtime_break/t_step)
 dc = (c_end/timesteps)
+
+#Experimental setup to get state values
 
 def tip( net , initial_state ):
     
@@ -422,184 +322,107 @@ i_list = info[2]
 id = f"dc_500"
 noise = f"normal"
 
-# Print out tau kendall value for the whole time series
-#kend_item = kendalltau(c_list, correlation)
-#print(kend_item)
-
-
-# nochmal os.chdir neu definieren um outputs/errors abzuspeichern
-#os.chdir("/p/projects/dominoes/lena/jobs/results/noise/final")
+#Code to load pictures and create plots to depict state value distribution
 
 '''
-#Plotting sequence for spatial variance
+#Print a picture every 10 iterations
+if i == (ilist[-1]/100): #i % 10 == 0 or 
+    print(i)
+    
+    os.chdir("/p/projects/dominoes/lena/jobs/results/noise/final/{}/correlation_status".format(year))
+    print("Plotting sequence")
+    #latlon values
+    lat = net_data.variables["lat"][:]
+    lon = net_data.variables["lon"][:]   
+    tuples = [(lat[idx],lon[idx]) for idx in range(lat.size)]   
+    
+    #tuples_2 = [(idx, idy) for idx, idy in range(lat.size)]
+    #print(tuples_2)
 
-fig = plt.figure(figsize = (8,6))
-ax1 = fig.add_subplot(111)
-ax1.set_ylim(-1.0,1.4)
-line1, = ax1.plot(i_list, av_505, 'b', label = "Average state for cusp 505")
-line2, = ax1.plot(i_list, av_468, 'y', label = "Average state for cusp 468")
-line3, = ax1.plot(i_list, av_487, 'r', label = "Average state for cusp 487")
-ax1.set_xlabel('Timeseries')
-ax1.set_ylabel('Average state for forced cusps', color = 'black')
-ax1.tick_params(axis='x', labelsize=8)
-ax1.tick_params(axis='y', labelsize = 8)
+    #tuples_NWS = [(lat, lon) for lat in range(-17, +11) for lon in range(-79, -71)]
+    #print(np.sort(tuples_NWS))
+    #tuples_NSA = [(lat, lon) for lat in range(-7, +11) for lon in range(-71, -50)]
+    #tuples_SAM = [(lat, lon) for lat in range(-17, -7) for lon in range(-71, -50)]
+    #tuples_NES = [(lat, lon) for lat in range(-17, 2) for lon in range(-50, -44)]
 
-ax2 = ax1.twinx()
-line4, = ax2.plot(i_list, variance, 'g', label = "Spatial variance")
-ax2.set_ylabel('Spatial Variance', color = 'g' )
-ax2.tick_params(axis='y', labelsize = 8)
-axes = plt.gca()
-axes.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
-ax1.xaxis.label.set_size(10)
-ax1.yaxis.label.set_size(10)
-ax2.yaxis.label.set_size(10)
-plt.legend((line1, line2, line3, line4), ('Average state for cusp 505', 'Average state for cusp 468', 'Average state for cusp 487', 'Spatial variance'), prop={'size': 8}, loc='upper right')
-plt.axvline(x=c_lis[0])
+    lat = np.unique(lat)
+    #print(f"Latitude values are", lat)
+    lon = np.unique(lon)
+    lat = np.append(lat, lat[-1]+lat[-1]-lat[-2]) 
+    lon = np.append(lon, lon[-1]+lon[-1]-lon[-2])
 
-#plt.title("Varying c-values for cusps 468, 487 and 505, selected network upper right (0.01*60 rate)", fontsize=10)
-plt.title("Spatial variance plot approaching drought scenario of year {} with {}".format(year_type, id), fontsize=10)
-plt.tight_layout()
-fig.savefig("spat_var_unstable_amaz_{}_{}_adaptsample{}_adaptsigma{}_field_number{}_{}_noise{}_allstates.png".format(resolution_type, 
-        year_type, str(start_file).zfill(3), int(np.around(100*adapt)), id, float(rain_fact), noise), dpi=200)
+    vals = np.empty((lat.size,lon.size)) #Vals is True or False depending on if the cells tipped
+    vals[:,:] = np.nan
 
-#Plotting sequence for correlation
-fig = plt.figure(figsize = (8,6))
-ax1 = fig.add_subplot(111)
-ax1.set_ylim(-1.0,1.4)
-line1, = ax1.plot(i_list, av_505, 'b', label = "Average state for cusp 505")
-line2, = ax1.plot(i_list, av_468, 'y', label = "Average state for cusp 468")
-line3, = ax1.plot(i_list, av_487, 'r', label = "Average state for cusp 487")
-ax1.set_xlabel('Timeseries')
-ax1.set_ylabel('Average state for forced cusps', color = 'black')
-ax1.tick_params(axis='x', labelsize=8)
-ax1.tick_params(axis='y', labelsize = 8)
-
-ax2 = ax1.twinx()
-line4, = ax2.plot(i_list, correlation, 'g', label = "Spatial correlation")
-ax2.set_ylabel('Spatial correlation', color = 'g' )
-ax2.tick_params(axis='y', labelsize = 8)
-axes = plt.gca()
-axes.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
-ax1.xaxis.label.set_size(10)
-ax1.yaxis.label.set_size(10)
-ax2.yaxis.label.set_size(10)
-plt.legend((line1, line2, line3, line4), ('Average state for cusp 505', 'Average state for cusp 468', 'Average state for cusp 487', 'Spatial correlation'), prop={'size': 8}, loc='upper right')
-plt.axvline(x=c_corr[0])
-
-#plt.title("Varying c-values for cusps 468, 487 and 505, selected network upper right (0.01*60 rate)", fontsize=10)
-plt.title("Spatial correlation plot approaching drought of year {} scenario with {}".format(year_type, id), fontsize=10)
-plt.tight_layout()
-#fig.savefig("cor_unstable_amaz_{}_{}_adaptsample{}_adaptsigma{}_field_number{}_{}_noise{}.png".format(resolution_type, 
-#        year_type, str(start_file).zfill(3), int(np.around(100*adapt)), id, float(rain_fact), noise), dpi=200)
-'''
-
-
-#Code snipped to calculate values for individual cells and individual years
-
-#Save tipping cell values for indivdual years
-'''
-
-# Tipping cells for 0,1,2,3 (2005)
-    cusp47_av = [] #For region 0
-    cusp172_av = [] #For region 1
-    cusp538_av = [] #For region 3
-
-    cusp400_av = []
-    cusp401_av = []
-    cusp420_av = []
-    cusp421_av = []
-    cusp440_av = []
-    cusp441_av = []
-
-    # Tipping cells for 0,1,3 (2007) Region 2 is 440
-    cusp30_av = []
-    cusp218_av = []
-    cusp540_av = []
-
-    # Tipping cells for 1 Region (2010) Region 2 is 400, Region 3 538 and Region 0 30
-    cusp216_av = []
-
-path = '/p/projects/dominoes/lena/jobs/results/noise/final/{}'.format(year)
-fmt = '%1.9f'
-i_list_new = [item * 100 for item in i_lis]
-print(f"i_List_new has shape", np.shape(i_list_new))
-
-# Calculte the average state at each c-value for tipping cells / append the state separetly
-if int(year) == 2005:
-    cusp_47 = ev.get_timeseries()[1][-1].T[47]
-    cusp_172 = ev.get_timeseries()[1][-1].T[172]
-    cusp_440 = ev.get_timeseries()[1][-1].T[440]
-    cusp_538 = ev.get_timeseries()[1][-1].T[538]
-    #print(f"Shape of cusp_505 is:", np.shape(cusp_505))
-    cusp47_av.append(cusp_47)  #Region0
-    cusp538_av.append(cusp_538) #Region3
-    cusp172_av.append(cusp_172)  #Region1  
-    cusp440_av.append(cusp_440)     #Region2 
-
-elif int(year) == 2007:
-    cusp_30 = ev.get_timeseries()[1][-1].T[30]
-    cusp_218 = ev.get_timeseries()[1][-1].T[218]
-    cusp_400 = ev.get_timeseries()[1][-1].T[400]
-    cusp_540 = ev.get_timeseries()[1][-1].T[540]
-
-    cusp30_av.append(cusp_30) #Region0
-    cusp218_av.append(cusp_218) 
-    cusp400_av.append(cusp_400) #Region1
-    cusp540_av.append(cusp_540)
-
-elif int(year) == 2010:
-    cusp_30 = ev.get_timeseries()[1][-1].T[30]
-    cusp_216 = ev.get_timeseries()[1][-1].T[216]
-    cusp_440 = ev.get_timeseries()[1][-1].T[440]
-    cusp_538 = ev.get_timeseries()[1][-1].T[538]
-
-    cusp30_av.append(cusp_30) #Region0
-    cusp216_av.append(cusp_216)
-    cusp440_av.append(cusp_440) 
-    cusp538_av.append(cusp_538)
-
-else:
-    print(f"Please select a year of the above")
-
-if int(year) == 2005:
-    if no_cpl_dummy == True:
-        np.savetxt(os.path.join(path, "no_coupling/cusp_47_{}_region{}.txt".format(year, region)), cusp47_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/cusp_172_{}_region{}.txt".format(year, region)), cusp172_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/cusp_440_{}_region{}.txt".format(year, region)), cusp440_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/cusp_538_{}_region{}.txt".format(year, region)), cusp538_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/i_list_{}_region{}.txt".format(year, region)), i_list_new, fmt = '%d')
+    #For different regions latitutde and longitude latitude and longitutde values
+    if region == 0:
+        tuples_region = [(lat, lon) for lat in range(-17, +11) for lon in range(-79, -71)]                 
+        #print(f"Tuple values for region 0 are:", tuples_region)
+    elif region == 1:
+        tuples_region = [(lat, lon) for lat in range(-7, +11) for lon in range(-71, -50)]
+        #print(f"Tuple values for region 0 are:", tuples_region)
+    elif region == 2:
+        tuples_region = [(lat, lon) for lat in range(-17, -7) for lon in range(-71, -50)]
+    elif region == 3:
+        tuples_region = [(lat, lon) for lat in range(-17, 2) for lon in range(-50, -44)]
     else:
-        np.savetxt(os.path.join(path, "cusp_47_{}_region{}.txt".format(year, region)), cusp47_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "cusp_172_{}_region{}.txt".format(year, region)), cusp172_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "cusp_440_{}_region{}.txt".format(year, region)), cusp440_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "cusp_538_{}_region{}.txt".format(year, region)), cusp538_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "i_list_{}_region{}.txt".format(year, region)), i_list_new, fmt = '%d')
-elif int(year) == 2007:
+        lat = lat
+        lon = lon
+
+    tuple_list = []
+    for idx,x in enumerate(lat):
+        for idy,y in enumerate(lon):
+            if (x,y) in tuples and (x,y) in tuples_region: #and (x,y) in tuples_region:
+                tuple_list.append(tuples.index((x,y)))
+                #print(f"(x,y) are", ((x,y)))
+                print(f"Tuples index is.,", tuples.index((x,y)))
+                cell_index = list(cells).index(tuples.index((x,y)))
+                print(f"Cell index is:,", cell_index)
+
+                #Get all cells values if tipped or not in varible p
+                #p = net.get_tip_states(ev.get_timeseries()[1][-1])[:][tuples.index((x,y))]
+                
+                #Get also intermediate values for cells
+                if no_cpl_dummy == True:
+                    p = all_states_nocpl[cell_index, i]
+                    #print(f"p-value of tuple is", p)
+                    vals[idx,idy] = p
+                else:
+                    p = all_states[cell_index, i]
+                    vals[idx,idy] = p
+            else:
+                pass
+
+    print(f"Sorted tuple list is:", np.sort(tuple_list))
+
+    plt.rc('text', usetex=False)
+    plt.rc('font', family='serif', size=25)
+
+    plt.figure(figsize=(15,10))
+
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    ax.set_extent([275, 320, -22, 15], crs=ccrs.PlateCarree())
+    ax.add_feature(cfeature.COASTLINE, linewidth=1)
+    ax.coastlines('50m')
+    # cmap = plt.get_cmap('turbo')
+    # cmap = plt.get_cmap('summer')
+    # cmap = matplotlib.cm.ocean(np.linspace(0,1,20))
+    cmap = matplotlib.cm.summer(np.linspace(0,1,20))
+    cmap = matplotlib.colors.ListedColormap(cmap[0:20])
+
+    plt.pcolor(lon-(lon[-1]-lon[-2]) / 2, lat-(lat[-1]-lat[-2]) / 2, vals, cmap=cmap)
+    #nx.draw_networkx(net,pos, edge_color='black', node_size=0, with_labels=False)
+    cbar = plt.colorbar(label='Unstable Amazon states with coupling')
+
     if no_cpl_dummy == True:
-        np.savetxt(os.path.join(path, "no_coupling/cusp_30_{}_region{}.txt".format(year, region)), cusp30_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/cusp_218_{}_region{}.txt".format(year, region)), cusp218_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/cusp_400_{}_region{}.txt".format(year, region)), cusp400_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/cusp_540_{}_region{}.txt".format(year, region)), cusp540_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/i_list_{}_region{}.txt".format(year, region)), i_list_new, fmt = '%d')
+        plt.savefig("no_coupling/region{}/unstable_amaz_{}_{}_adaptsample{}_adaptsigma{}_number{}_{}_{}_pic{}.png".format(region, resolution_type, year_type, 
+            str(start_file).zfill(3), int(np.around(100*adapt)), id, float(rain_fact), realtime_break, i), bbox_inches='tight')
     else:
-        np.savetxt(os.path.join(path, "cusp_30_{}_region{}.txt".format(year, region)), cusp30_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "cusp_218_{}_region{}.txt".format(year, region)), cusp218_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "cusp_400_{}_region{}.txt".format(year, region)), cusp400_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "cusp_540_{}_region{}.txt".format(year, region)), cusp540_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "i_list_{}_region{}.txt".format(year, region)), i_list_new, fmt = '%d')
-elif int(year) == 2010:
-    if no_cpl_dummy == True:
-        np.savetxt(os.path.join(path, "no_coupling/cusp_30_{}_region{}.txt".format(year, region)), cusp30_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/cusp_216_{}_region{}.txt".format(year, region)), cusp216_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/cusp_440_{}_region{}.txt".format(year, region)), cusp440_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/cusp_538_{}_region{}.txt".format(year, region)), cusp538_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "no_coupling/i_list_{}_region{}.txt".format(year, region)), i_list_new, fmt = '%d')
-    else:
-        np.savetxt(os.path.join(path, "cusp_30_{}_region{}.txt".format(year, region)), cusp30_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "cusp_216_{}_region{}.txt".format(year, region)), cusp216_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "cusp_440_{}_region{}.txt".format(year, region)), cusp440_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "cusp_538_{}_region{}.txt".format(year, region)), cusp538_av, fmt = fmt)
-        np.savetxt(os.path.join(path, "i_list_{}_region{}.txt".format(year, region)), i_list_new, fmt = '%d')
-else:
-    print(f"Please select one of the aboveyears")
+        plt.savefig("region{}/unstable_amaz_{}_{}_adaptsample{}_adaptsigma{}_number{}_{}_{}_pic{}.png".format(region, resolution_type, year_type, 
+            str(start_file).zfill(3), int(np.around(100*adapt)), id, float(rain_fact), realtime_break, i), bbox_inches='tight')
+        
+
+    #plt.show()
+    plt.clf()
+    plt.close() 
 '''
