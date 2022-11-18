@@ -67,29 +67,7 @@ c_begin = np.loadtxt("./jobs/results/noise/final/c_begin_values.txt", usecols = 
 # Choose between NWS(0), NSA(1), SAM(2), NES(3)
 year = 2005
 #region = 0
-'''
-if region == 0:
-    cells = np.loadtxt("./jobs/results/noise/NWS_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NWS.txt", dtype=int)
-elif region == 1:
-    cells = np.loadtxt("./jobs/results/noise/NSA_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NSA.txt", dtype=int)
-elif region == 2:
-    cells = np.loadtxt("./jobs/results/noise/SAM_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_SAM.txt", dtype=int)
-elif region == 3:
-    cells = np.loadtxt("./jobs/results/noise/NES_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NES.txt", dtype=int)
-else:
-    print(f"Whole network is selected")
-    c_end = np.loadtxt("./jobs/results/noise/final/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
-    cells = range(0, 567)
-'''
+
 #c_end[ c_end < 0] = 0
 t_step = 0.1
 realtime_break = 100 #originally 30000 and works with 200 (see r_crt_unstable_amazon.py)
@@ -260,61 +238,3 @@ ax1.yaxis.label.set_size(17)
 plt.tight_layout()
 
 fig.savefig("coupling_sensitivity_{}_variance_final.png".format(year), dpi=200)
-
-
-'''
-#Plotting squences for variance 
-
-fig = plt.figure(figsize = (8,6))
-ax1 = fig.add_subplot(111)
-ax1.set_ylim(-1.0,1.0)
-
-#Load coupling and no_coupling values for tipped cells
-#line1, =  ax1.plot(ilist, cpl_cell, 'black', linestyle = "-") # coupling
-#line2, = ax1.plot(ilist_nocpl, no_cpl_cell, 'black', linestyle = "--") #no coupling
-line1, =  ax1.plot(coupling, kendall_cpl, 'black', linestyle = "-") # coupling
-line2, = ax1.plot(coupling, kendall_no_cpl, 'black', linestyle = "--") #no coupling
-
-ax1.set_xlabel('Coupling strenght factor')
-ax1.set_ylabel('Kendall-Tau Rank correlation parameter', color = 'black')
-ax1.tick_params(axis='x', labelsize = 8)
-ax1.tick_params(axis='y', labelsize = 8)
-
-#ax2 = ax1.twinx()
-
-#line3, = ax2.plot(ilist, var_cpl, 'g')
-#line4, = ax2.plot(ilist_nocpl, var_no_cpl, 'g', linestyle = "--")
-
-textstr = '\n'.join((
-    r'$\mathrm{Kendall-tau}=%.2f$' % (kend_item_cpl, ),
-    r'$\mathrm{Kendall-tau(nocpl)}=%.2f$' % (kend_item_nocpl, )))
-
-ax1.text(0.01, 0.7, textstr, transform=ax1.transAxes, fontsize=8)
-#bbox=dict(facecolor='black', alpha=0.5),
-
-
-plt.legend((line1, line2), ('Coupling', 'No coupling#'))
-
-
-#ax2.set_ylabel('Spatial variance', color = 'g')
-#ax2.tick_params(axis='y', labelsize = 8)
-#ax2.set_ylim(0, 0.01)
-
-axes = plt.gca()
-axes.ticklabel_format(style='plain', axis='y', scilimits=(0,0))
-ax1.xaxis.label.set_size(10)
-ax1.yaxis.label.set_size(10)
-#ax2.yaxis.label.set_size(10)  
-
-#plt.title("Varying c-values for cusps 468, 487 and 505, selected network upper right (0.01*60 rate)", fontsize=10)
-plt.title("Kendall-Tau Rank variation for different noise values approaching year {} drought scenario for region {}".format(year, region), fontsize=10)
-plt.tight_layout()
-#plt.gca().add_artist(lengend1)
-
-#if no_cpl_dummy == True:
-#    fig.savefig("no_coupling/spat_var_unstable_amaz_{}_{}_adaptsample{}_adaptsigma{}_{}_{}_noise{}_std1.png".format(resolution_type, 
-#        year_type, str(start_file).zfill(3), int(np.around(100*adapt)), id, float(rain_fact), noise), dpi=200)
-#else:
-
-fig.savefig("coupling_sensitivity_{}_region_{}.png".format(year, region), dpi=200)
-'''
