@@ -4,7 +4,7 @@ Pyhtonframework to study the detection of SEWSs on the Amazon rainforest
 # Installation
 
 `
-conda create -n SEWS python=3.9 
+conda create -n SEWS python=3.9\ 
 conda deactivate 
 conda activate SEWS 
 conda install -c conda-forge mamba 
