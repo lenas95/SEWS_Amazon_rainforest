@@ -48,8 +48,7 @@ from sklearn import preprocessing
 import scipy.stats as stats
 
 
-"This code can be used to calculate the correlation between neighbouring cells (and plot it against average state of cell) for specially selected cells when increasing c_value for one/or more cells"
-"The spatial correlation index was defined as the two-point correlation for all pairs of cells separated by distance 1, using the Moran’s coefficient (Legendre)"
+"This code can be used to calculate the normalized distribution of the connection strengths in the Amazon rainforest"
 
 #sys_var = np.array(sys.argv[2:])
 #year = sys_var[0]
@@ -112,25 +111,26 @@ lon = net_data.variables["lon"][:]
 tuples = [(lat[idx],lon[idx]) for idx in range(lat.size)]
 
 if region == 0:
-    cells = np.loadtxt("./jobs/results/noise/NWS_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NWS.txt", dtype=int)
+    cells = np.loadtxt("./NWS_cells.txt", dtype=int)
+    c_end = np.loadtxt("./c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./neighbourslist_NWS.txt", dtype=int)
 elif region == 1:
-    cells = np.loadtxt("./jobs/results/noise/NSA_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NSA.txt", dtype=int)
+    cells = np.loadtxt("./NSA_cells.txt", dtype=int)
+    c_end = np.loadtxt("./c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./neighbourslist_NSA.txt", dtype=int)
 elif region == 2:
-    cells = np.loadtxt("./jobs/results/noise/SAM_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_SAM.txt", dtype=int)
+    cells = np.loadtxt("./SAM_cells.txt", dtype=int)
+    c_end = np.loadtxt("./c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./neighbourslist_SAM.txt", dtype=int)
 elif region == 3:
-    cells = np.loadtxt("./jobs/results/noise/NES_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
+    cells = np.loadtxt("./NES_cells.txt", dtype=int)
+    c_end = np.loadtxt("./c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
     neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NES.txt", dtype=int)
 else:
     print(f"Whole network is selected")
-    c_end = np.loadtxt("./jobs/results/noise/final/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
+    c_end = np.loadtxt("./c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
+    neighbour = np.loadtxt("./neighbourslist.txt", dtype=int)
+    cells = len(list(0, 567))
 
 '''
 if no_cpl_dummy == True:   
