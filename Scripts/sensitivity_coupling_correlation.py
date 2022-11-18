@@ -66,36 +66,6 @@ c_begin = np.loadtxt("./jobs/results/noise/final/c_begin_values.txt", usecols = 
 
 # Choose between NWS(0), NSA(1), SAM(2), NES(3)
 year = 2005
-#region = 1
-'''
-if region == 0:
-    cells = np.loadtxt("./jobs/results/noise/NWS_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NWS.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NWS.txt", dtype=int)
-elif region == 1:
-    cells = np.loadtxt("./jobs/results/noise/NSA_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NSA.txt".format(year,year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NSA.txt", dtype=int)
-elif region == 2:
-    cells = np.loadtxt("./jobs/results/noise/SAM_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_SAM.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_SAM.txt", dtype=int)
-elif region == 3:
-    cells = np.loadtxt("./jobs/results/noise/NES_cells.txt", dtype=int)
-    c_end = np.loadtxt("./jobs/results/noise/final/{}/c_end_values_{}_NES.txt".format(year, year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist_NES.txt", dtype=int)
-else:
-    print(f"Whole network is selected")
-    c_end = np.loadtxt("./jobs/results/noise/final/c_end_values_{}.txt".format(year), usecols = (1), dtype= np.float64)
-    neighbour = np.loadtxt("./jobs/results/noise/neighbourslist.txt", dtype=int)
-    cells = range(0, 567)
-
-c_end[ c_end < 0] = 0
-t_step = 0.1
-realtime_break = 100 #originally 30000 and works with 200 (see r_crt_unstable_amazon.py)
-timesteps = (realtime_break/t_step)
-dc = (c_end/timesteps)
-'''
 os.chdir("/p/projects/dominoes/lena/jobs/results/noise/final/{}/coupling_states".format(year))
 
 c_lis = []
@@ -107,8 +77,9 @@ p_cpl = []
 kendall_tau = []
 p = []
 coupling = np.arange(1.0, 5.5, 0.5)
-print(coupling)
 
+# The scripts below calculate the Moran's I coefficient for the different regions and save the respective Kendall$\tau$ value denoting the strength of the trend
+# Two different approaches of computing the Moran's I coefficient were implemented. Both giving the same result but the first one being faster
 '''
 regions_list = [0,1,2,3]
 #Try out with another sum approach
@@ -156,7 +127,7 @@ def correlation():
                 corr_item = len(list(cells)) * (sum) /(len(list(neighbour)) * np.sum(den_list))
                 cor.append(corr_item)
 
-            #kendall_tau_only = kendalltau(var, noise)
+            #kendall_tau_only = kendalltau(cor, noise)  #The mk.original_test gives out same tau and p-values as the kendalltau(cor, noise) or kendalltau(cor, iterations)
             #print(f"kendall tau only is", kendall_tau_only)
             mk_cpl = mk.original_test(cor)
             print(f"MK coupling is", mk_cpl)
@@ -200,7 +171,7 @@ def correlation_nocpl():
             corr_item = len(list(cells)) * (sum) /(len(list(neighbour)) * np.sum(den_list))
             cor_nocpl.append(corr_item)
 
-        mk_nocpl = mk.original_test(cor_nocpl)
+        mk_nocpl = mk.original_test(cor_nocpl)   #The mk.original_test gives out same tau and p-values as the kendalltau(cor, noise) or kendalltau(cor, iterations)
         print(f"Mk no coupling is", mk_nocpl)
         kend_item_nocpl, pval_nocpl = mk_nocpl.Tau, mk_nocpl.p
         kendall_tau.append(kend_item_nocpl)
@@ -212,7 +183,7 @@ def correlation_nocpl():
 
 regions_list = [0,1,2,3]
 #Deactivate to calculate sensitivity to coupling
-#Calculate correlation from loaded states according to Dakos 2012
+#Calculate correlation from loaded states according to Dakos 2010
 '''
 def correlation_nocpl():
 
@@ -267,7 +238,7 @@ def correlation_nocpl():
             np.savetxt(os.path.join(path, "no_coupling/correlation{}_region{}_coupling{}.txt".format(year, region, element)), (cor_nocpl, j_list), fmt = fmt)
 
             
-            mk_nocpl = mk.original_test(cor_nocpl)
+            mk_nocpl = mk.original_test(cor_nocpl)  #The mk.original_test gives out same tau and p-values as the kendalltau(cor, noise) or kendalltau(cor, iterations)
             print(f"Mk no coupling is", mk_nocpl)
             kend_item_nocpl, pval_nocpl = mk_nocpl.Tau, mk_nocpl.p
             kendall_tau.append(kend_item_nocpl)
@@ -332,7 +303,7 @@ def correlation():
             np.savetxt(os.path.join(path, "region{}/correlation{}_region{}_coupling{}.txt".format(region, year, region, element)), (cor), fmt = fmt)
 
             #kendall_tau_only = kendalltau(cor, noise)
-            #print(f"kendall tau only is", kendall_tau_only)
+            #print(f"kendall tau only is", kendall_tau_only)  #The mk.original_test gives out same tau and p-values as the kendalltau(cor, noise) or kendalltau(cor, iterations)
             mk_cpl = mk.original_test(cor)
             print(f"MK coupling is", mk_cpl)
             kend_item_cpl, pval_cpl = mk_cpl.Tau, mk_cpl.p
@@ -411,61 +382,3 @@ ax2.grid(False)
 plt.tight_layout()
 
 fig.savefig("coupling_sensitivity_{}_correlation_final.png".format(year), dpi=200)
-
-'''
-#Plotting squences for variance and correlation
-
-fig = plt.figure(figsize = (8,6))
-ax1 = fig.add_subplot(111)
-ax1.set_ylim(-1.0,1.0)
-
-#Load coupling and no_coupling values for tipped cells
-#line1, =  ax1.plot(ilist, cpl_cell, 'black', linestyle = "-") # coupling
-#line2, = ax1.plot(ilist_nocpl, no_cpl_cell, 'black', linestyle = "--") #no coupling
-
-line1, =  ax1.plot(coupling, kendall_cpl, 'black', linestyle = "-") # coupling
-line2, = ax1.plot(coupling, kendall_nocpl, 'black', linestyle = "--") #no coupling
-
-ax1.set_xlabel('Coupling strenght factor')
-ax1.set_ylabel('Kendall-Tau Rank correlation parameter', color = 'black')
-ax1.tick_params(axis='x', labelsize = 8)
-ax1.tick_params(axis='y', labelsize = 8)
-
-#ax2 = ax1.twinx()
-
-#line3, = ax2.plot(ilist, var_cpl, 'g')
-#line4, = ax2.plot(ilist_nocpl, var_no_cpl, 'g', linestyle = "--")
-
-textstr = '\n'.join((
-    r'$\mathrm{Kendall-tau}=%.2f$' % (kend_item_cpl, ),
-    r'$\mathrm{Kendall-tau(nocpl)}=%.2f$' % (kend_item_nocpl, )))
-
-ax1.text(0.01, 0.7, textstr, transform=ax1.transAxes, fontsize=8)
-#bbox=dict(facecolor='black', alpha=0.5),
-
-
-plt.legend((line1, line2), ('Coupling', 'No coupling'))
-
-
-#ax2.set_ylabel('Spatial variance', color = 'g')
-#ax2.tick_params(axis='y', labelsize = 8)
-#ax2.set_ylim(0, 0.01)
-
-axes = plt.gca()
-axes.ticklabel_format(style='plain', axis='y', scilimits=(0,0))
-ax1.xaxis.label.set_size(10)
-ax1.yaxis.label.set_size(10)
-#ax2.yaxis.label.set_size(10)  
-
-#plt.title("Varying c-values for cusps 468, 487 and 505, selected network upper right (0.01*60 rate)", fontsize=10)
-plt.title("Kendall-Tau Rank variation for different noise values approaching year {} for region {}".format(year, region), fontsize=10)
-plt.tight_layout()
-#plt.gca().add_artist(lengend1)
-
-#if no_cpl_dummy == True:
-#    fig.savefig("no_coupling/spat_var_unstable_amaz_{}_{}_adaptsample{}_adaptsigma{}_{}_{}_noise{}_std1.png".format(resolution_type, 
-#        year_type, str(start_file).zfill(3), int(np.around(100*adapt)), id, float(rain_fact), noise), dpi=200)
-#else:
-
-fig.savefig("coupling_sensitivity_{}_region_{}_correlation_v2.png".format(year, region), dpi=200)
-'''
