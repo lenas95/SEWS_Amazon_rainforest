@@ -27,7 +27,6 @@ setup(name='SEWS',
         long_description_content_type="text/markdown",
         classifiers=[
                 "Intended Audience :: Science/Research",
-                "License :: MIT",
                 "Programming Language :: Python :: 3"
                  ],
         packages=find_packages(),
